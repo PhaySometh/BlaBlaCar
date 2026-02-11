@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:week_3_blabla_project/ui/screens/location_picker/location_picker_screen.dart';
+import 'package:week_3_blabla_project/ui/screens/ride_pref/widgets/bla_button.dart';
+import 'package:week_3_blabla_project/ui/screens/ride_pref/widgets/form_tile.dart';
+import 'package:week_3_blabla_project/ui/widgets/display/bla_divider.dart';
+import 'package:week_3_blabla_project/ui/theme/theme.dart';
 
 import '../../../../model/ride/locations.dart';
 import '../../../../model/ride_pref/ride_pref.dart';
@@ -15,8 +21,9 @@ import '../../../../model/ride_pref/ride_pref.dart';
 class RidePrefForm extends StatefulWidget {
   // The form can be created with an optional initial RidePref.
   final RidePref? initRidePref;
+  final Function(RidePref)? onSearchPressed;
 
-  const RidePrefForm({super.key, this.initRidePref});
+  const RidePrefForm({super.key, this.initRidePref, this.onSearchPressed});
 
   @override
   State<RidePrefForm> createState() => _RidePrefFormState();
@@ -35,27 +42,136 @@ class _RidePrefFormState extends State<RidePrefForm> {
   @override
   void initState() {
     super.initState();
-    // TODO
+    departure = widget.initRidePref?.departure;
+    arrival = widget.initRidePref?.arrival;
+    departureDate = widget.initRidePref?.departureDate ?? DateTime.now();
+    requestedSeats = widget.initRidePref?.requestedSeats ?? 1;
   }
 
   // ----------------------------------
   // Handle events
   // ----------------------------------
 
+  void onSelectedDeparture() async {
+    final selectedLocation = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LocationPickerScreen()),
+    );
+    if (selectedLocation != null) {
+      setState(() {
+        departure = selectedLocation;
+      });
+    }
+  }
+
+  void onSelectedArrival() async {
+    final selectedLocation = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LocationPickerScreen()),
+    );
+    if (selectedLocation != null) {
+      setState(() {
+        arrival = selectedLocation;
+      });
+    }
+  }
+
+  void onSwitchLocations() {
+    setState(() {
+      final temp = departure;
+      departure = arrival;
+      arrival = temp;
+    });
+  }
+
+  void onSearchPressed() {
+    if (isSearchValid) {
+      final ridePref = RidePref(
+        departure: departure!,
+        arrival: arrival!,
+        departureDate: departureDate,
+        requestedSeats: requestedSeats,
+      );
+      if (widget.onSearchPressed != null) {
+        widget.onSearchPressed!(ridePref);
+      }
+    }
+  }
+
   // ----------------------------------
   // Compute the widgets rendering
   // ----------------------------------
+
+  bool get isSearchValid => departure != null && arrival != null;
+
+  String get dateText => DateFormat('EEEE, MMMM d').format(departureDate);
+  String get seatsText => requestedSeats.toString();
 
   // ----------------------------------
   // Build the widgets
   // ----------------------------------
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [ 
-        
-        ]);
+    return Padding(
+      padding: EdgeInsets.all(BlaSpacings.m),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Departure
+          FormTile(
+            customIcon: Icons.trip_origin,
+            value: departure?.name,
+            hintText: "Leaving from",
+            onTap: onSelectedDeparture,
+            trailing: departure != null
+                ? IconButton(
+                    icon: Icon(Icons.swap_vert, color: BlaColors.primary),
+                    onPressed: onSwitchLocations,
+                    iconSize: 20,
+                  )
+                : null,
+          ),
+          BlaDivider(),
+
+          // Arrival
+          FormTile(
+            customIcon: Icons.trip_origin,
+            value: arrival?.name,
+            hintText: "Going to",
+            onTap: onSelectedArrival,
+          ),
+          BlaDivider(),
+
+          // Date
+          FormTile(
+            customIcon: Icons.date_range,
+            value: dateText,
+            onTap: () {
+              // TODO: Implement date picker
+            },
+          ),
+          BlaDivider(),
+
+          // Seats
+          FormTile(
+            customIcon: Icons.people,
+            value: seatsText,
+            onTap: () {
+              // TODO: Implement seat picker
+            },
+          ),
+
+          SizedBox(height: BlaSpacings.m),
+
+          // Search button - enabled only when departure and arrival are set
+          BlaButton(
+            customText: "Search",
+            isPrimary: true,
+            onPressed: isSearchValid ? onSearchPressed : null,
+          ),
+        ],
+      ),
+    );
   }
 }
