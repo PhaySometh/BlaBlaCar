@@ -1,6 +1,7 @@
-import 'package:blablacar/model/ride_pref/ride_pref.dart';
-import 'package:blablacar/services/ride_prefs_service.dart';
 import 'package:flutter/material.dart';
+import 'package:week_3_blabla_project/model/ride_pref/ride_pref.dart';
+import 'package:week_3_blabla_project/services/ride_prefs_service.dart';
+import 'package:week_3_blabla_project/ui/screens/ride_pref/widgets/bla_button.dart';
 import '../../theme/theme.dart';
 import 'widgets/ride_prefs_form.dart';
 import 'widgets/ride_prefs_tile.dart';
@@ -21,10 +22,10 @@ class RidePrefsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [_buildBackground(), _buildForeground()]);
+    return Stack(children: [_buildBackground(), _buildForeground(context)]);
   }
 
-  Widget _buildForeground() {
+  Widget _buildForeground(BuildContext context) {
     return Column(
       children: [
         // 1 - THE HEADER
@@ -50,7 +51,12 @@ class RidePrefsScreen extends StatelessWidget {
             children: [
               // 2 - THE FORM
               RidePrefForm(initRidePref: RidePrefsService.selectedRidePref),
-              SizedBox(height: BlaSpacings.m),
+              // BLA002
+              BlaButton(
+                customText: "Search",
+                isPrimary: true,
+                onPressed: () {},
+              ),
 
               // 3 - THE HISTORY
               _buildHistory(),
