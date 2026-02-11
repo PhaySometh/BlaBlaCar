@@ -23,7 +23,6 @@ class BlaButton extends StatelessWidget {
     final ButtonStyle style = ElevatedButton.styleFrom(
       foregroundColor: textColor,
       backgroundColor: backgroundColor,
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
     );
     return ElevatedButton(
       onPressed: onPressed,

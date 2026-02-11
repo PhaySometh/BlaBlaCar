@@ -51,12 +51,6 @@ class RidePrefsScreen extends StatelessWidget {
             children: [
               // 2 - THE FORM
               RidePrefForm(initRidePref: RidePrefsService.selectedRidePref),
-              // BLA002
-              BlaButton(
-                customText: "Search",
-                isPrimary: true,
-                onPressed: () {},
-              ),
 
               // 3 - THE HISTORY
               _buildHistory(),

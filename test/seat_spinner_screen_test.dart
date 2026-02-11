@@ -15,7 +15,8 @@ void main() {
       expect(find.text('Number of seats to book'), findsOneWidget);
     });
 
-    testWidgets('should display initial seat count', (WidgetTester tester) async {
+    testWidgets('should display initial seat count',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: SeatSpinnerScreen(initialSeats: 3),
@@ -77,7 +78,7 @@ void main() {
 
       // Find the decrement button
       final decrementButton = find.byIcon(Icons.remove_circle_outline);
-      
+
       // Try to tap it (should be disabled)
       await tester.tap(decrementButton);
       await tester.pump();
@@ -98,7 +99,7 @@ void main() {
 
       // Find the increment button
       final incrementButton = find.byIcon(Icons.add_circle_outline);
-      
+
       // Try to tap it (should be disabled)
       await tester.tap(incrementButton);
       await tester.pump();
@@ -142,7 +143,8 @@ void main() {
                   result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SeatSpinnerScreen(initialSeats: 3),
+                      builder: (context) =>
+                          const SeatSpinnerScreen(initialSeats: 3),
                     ),
                   );
                 },

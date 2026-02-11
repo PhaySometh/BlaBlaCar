@@ -86,7 +86,8 @@ class _SeatSpinnerScreenState extends State<SeatSpinnerScreen> {
                 children: [
                   // Decrement button
                   IconButton(
-                    onPressed: selectedSeats > minSeats ? _decrementSeats : null,
+                    onPressed:
+                        selectedSeats > minSeats ? _decrementSeats : null,
                     icon: Icon(
                       Icons.remove_circle_outline,
                       size: 40,
@@ -115,7 +116,8 @@ class _SeatSpinnerScreenState extends State<SeatSpinnerScreen> {
 
                   // Increment button
                   IconButton(
-                    onPressed: selectedSeats < maxSeats ? _incrementSeats : null,
+                    onPressed:
+                        selectedSeats < maxSeats ? _incrementSeats : null,
                     icon: Icon(
                       Icons.add_circle_outline,
                       size: 40,
